@@ -4,6 +4,7 @@ use configuration::get;
 use std::env;
 use std::ascii::AsciiExt;
 use std::io;
+use std::path::Path;
 
 macro_rules! printfl {
      ($($tt:tt)*) => {{
@@ -130,16 +131,5 @@ impl Blih {
 
         let request = "repository getacl ".to_string() + &dir;
         self.request(request);
-    }
-
-    pub fn new_project(&self, nb_args: usize, args: &[&str]) {
-        if nb_args != 1 {
-            println!("Usage: new [repository_name]");
-            return;
-        }
-        self.create(nb_args, &args);
-        self.setacl();
-        let handler = Git::new(self.verbose);
-        handler.clone(1, args);
     }
 }
