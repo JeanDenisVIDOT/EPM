@@ -69,7 +69,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn status(&self) {
+    pub fn status(&self) {
         if self.verbose { println!("--verbose: git status") }
         let command = Command::new("git")
             .arg("status")
@@ -82,7 +82,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn log(&self) {
+    pub fn log(&self) {
         if self.verbose { println!("--verbose: git log") }
         let command = Command::new("git")
             .arg("log")
@@ -95,7 +95,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn pull(&self) {
+    pub fn pull(&self) {
         if self.verbose { println!("--verbose: git pull") }
         let command = Command::new("git")
             .arg("pull")
@@ -108,7 +108,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn commit(&self) {
+    pub fn commit(&self) {
         if self.verbose { println!("--verbose: git commit") }
         printfl!("Commit message: ");
         let mut commit_message = String::new();
@@ -128,7 +128,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn add(&self, nb_args: usize, args: &[&str]) {
+    pub fn add(&self, nb_args: usize, args: &[&str]) {
         if nb_args == 0 {
             if self.verbose { println!("--verbose: git add --all") }
             let command = Command::new("git")
@@ -158,7 +158,7 @@ impl Git {
         }
     }
 
-    fn push(&self, nb_args: usize, args: &[&str]) {
+    pub fn push(&self, nb_args: usize, args: &[&str]) {
         if nb_args != 2 {
             println!("Usage: push [remote] [branch]");
             return;
@@ -180,7 +180,7 @@ impl Git {
         print!("{}", String::from_utf8_lossy(&command.stderr));
     }
 
-    fn allin(&self, nb_args: usize, args: &[&str]) {
+    pub fn allin(&self, nb_args: usize, args: &[&str]) {
         if nb_args != 2 && nb_args != 0 {
             println!("Usage: allin [remote] [branch]");
             return;
@@ -195,7 +195,7 @@ impl Git {
         }
     }
 
-    fn clone(&self, nb_args: usize, args: &[&str]) {
+    pub fn clone(&self, nb_args: usize, args: &[&str]) {
         if nb_args < 1 && nb_args > 2 {
             println!("Usage: clone (user) [repository_name]");
             return;
@@ -221,22 +221,5 @@ impl Git {
 
         print!("{}", String::from_utf8_lossy(&command.stdout));
         print!("{}", String::from_utf8_lossy(&command.stderr));
-    }
-
-}
-
-pub fn actions(verbose: bool, nb_args: usize, args: &Vec<&str>) -> bool {
-    let handler = Git::new(verbose);
-
-    match args[0] {
-        "status"        => { handler.status(); true },
-        "log"           => { handler.log(); true },
-        "pull"          => { handler.pull(); true },
-        "add"           => { handler.add(nb_args, &args[1..]); true },
-        "commit"        => { handler.commit(); true },
-        "push"          => { handler.push(nb_args, &args[1..]); true },
-        "allin"         => { handler.allin(nb_args, &args[1..]); true },
-        "clone"         => { handler.clone(nb_args, &args[1..]); true },
-        _               => false,
     }
 }

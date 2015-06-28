@@ -3,9 +3,10 @@ extern crate regex;
 extern crate crypto;
 
 use std::io;
+use git::Git;
+use blih::Blih;
 
 mod configuration;
-mod actions;
 mod blih;
 mod git;
 
@@ -25,6 +26,9 @@ fn main() {
         println!("Verbose mode actived.");
     }
 
+    let git = Git::new(configuration.verbose());
+    let blih = Blih::new(configuration.verbose());
+
     // start command prompt
     let mut stdin = io::stdin();
     loop {
@@ -34,7 +38,26 @@ fn main() {
         let _ = stdin.read_line(&mut user_input);
         let command: Vec<&str> = (user_input.trim()).split(' ').collect();
 
-        actions::manage(configuration.verbose(), command);
-    }
+        let nb_args = command[1..].len();
 
+        match command[0] {
+            "status"        => git.status(),
+            "log"           => git.log(),
+            "pull"          => git.pull(),
+            "add"           => git.add(nb_args, &command[1..]),
+            "commit"        => git.commit(),
+            "push"          => git.push(nb_args, &command[1..]),
+            "allin"         => git.allin(nb_args, &command[1..]),
+            "clone"         => git.clone(nb_args, &command[1..]),
+            "create"        => blih.create(nb_args, &command[1..]),
+            "new"           => blih.new_project(nb_args, &command[1..]),
+            "delete"        => blih.delete(nb_args, &command[1..]),
+            "list"          => blih.list (),
+            "init"          => blih.init (),
+            "upload"        => blih.upload(),
+            "setacl"        => blih.setacl(),
+            "getacl"        => blih.getacl(),
+            _               => println!("'{}': unknown command", &command[0]),
+        }
+    }
 }

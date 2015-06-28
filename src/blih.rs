@@ -131,19 +131,15 @@ impl Blih {
         let request = "repository getacl ".to_string() + &dir;
         self.request(request);
     }
-}
 
-pub fn actions(verbose: bool, nb_args: usize, args: &Vec<&str>) -> bool {
-    let handler = Blih::new(verbose);
-
-    match args[0] {
-        "create"        => { handler.create(nb_args, &args[1..]); true },
-        "delete"        => { handler.delete(nb_args, &args[1..]); true },
-        "list"          => { handler.list (); true },
-        "init"          => { handler.init (); true },
-        "upload"        => { handler.upload(); true },
-        "setacl"        => { handler.setacl(); true },
-        "getacl"        => { handler.getacl(); true },
-        _               => false,
+    pub fn new_project(&self, nb_args: usize, args: &[&str]) {
+        if nb_args != 1 {
+            println!("Usage: new [repository_name]");
+            return;
+        }
+        self.create(nb_args, &args);
+        self.setacl();
+        let handler = Git::new(self.verbose);
+        handler.clone(1, args);
     }
 }
