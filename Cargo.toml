@@ -1,0 +1,9 @@
+[package]
+name = "epm"
+version = "0.1.0"
+authors = ["Jean-Denis VIDOT <vidot_j> <vidot_j@epitech.eu>"]
+
+[dependencies]
+getopts = "0.2"
+regex = "0.1.8"
+rust-crypto = "*"
